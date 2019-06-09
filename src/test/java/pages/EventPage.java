@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Locale;
 
 
 public class EventPage extends BasePage {
@@ -69,7 +70,7 @@ public class EventPage extends BasePage {
 
         BigDecimal expectedReturn = numerator.divide(denominator, 22, RoundingMode.DOWN).add(BigDecimal.ONE).multiply(new BigDecimal(amount)).setScale(2, RoundingMode.DOWN);
 
-        return String.format("%.2f", expectedReturn);
+        return String.format(Locale.US,"%.2f", expectedReturn);
     }
 
     public void footerBetSlipClick() {
