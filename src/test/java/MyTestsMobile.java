@@ -1,22 +1,34 @@
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import pages.EventPage;
 import pages.FootballPage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MyTestsMobile extends TestBase {
+
+    @Override
+    void setUpDriver() {
+        Map<String, String> mobileEmulation = new HashMap<>();
+        mobileEmulation.put("deviceName", "Nexus 5");
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
+        driver = new ChromeDriver(chromeOptions);
+    }
 
     @Test
     public void placeBetTest() {
         final String AMOUNT = "0.05";
 
         mainPage.cookieAcceptClick();
+        mainPage.highlightsClick();
         FootballPage footballPage = mainPage.footballMobileLinkClick();
-//        EventPage eventPage = footballPage.englishPremierLeagueMobileLinkClick();
-
-        driver.get("https://sports.williamhill.com/betting/en-gb/football/OB_EV14079962/english-premier-league-outright");
-        EventPage eventPage= PageFactory.initElements(this.driver, EventPage.class);
+        mainPage.highlightsClick();
+        EventPage eventPage = footballPage.englishPremierLeagueMobileLinkClick();
 
         String odds = eventPage.getBetButtonOdds();
 
@@ -26,6 +38,5 @@ public class MyTestsMobile extends TestBase {
 
         Assert.assertEquals(odds, eventPage.getOfferedOdds());
         Assert.assertEquals(eventPage.getExpectedReturn(AMOUNT), eventPage.getOfferedReturn());
-
     }
 }

@@ -17,7 +17,7 @@ public class EventPage extends BasePage {
     }
 
     @FindAll({@FindBy(css = ".betbutton__odds")})
-    private List<WebElement> betButtons;
+    private WebElement betButton;
 
     @FindBy(css = ".bets-container input[type='text']")
     private WebElement betSlip;
@@ -36,16 +36,18 @@ public class EventPage extends BasePage {
 
     public void betButtonClick() {
         utils.waitForElementNotDisplayed(preloader);
-        utils.scrollIntoView(betButtons.get(0));
-        betButtons.get(0).click();
+        utils.scrollIntoView(betButton);
+        betButton.click();
     }
 
     public void betButtonMobileClick() {
-        betButtons.get(0).click();
+        utils.waitForElement(betButton);
+        betButton.click();
     }
 
     public String getBetButtonOdds() {
-        return betButtons.get(0).getText();
+        utils.waitForElement(betButton);
+        return betButton.getText();
     }
 
     public void betSlipFill(String amount) {
@@ -61,7 +63,7 @@ public class EventPage extends BasePage {
         return offeredReturn.getText();
     }
 
-    public String getExpectedReturn(String amount) {
+    public String getExpectedReturn(String amount) {     //calculation of expected return
         BigDecimal numerator = new BigDecimal(getOfferedOdds().substring(0, getOfferedOdds().indexOf('/')));
         BigDecimal denominator = new BigDecimal((getOfferedOdds().substring(getOfferedOdds().indexOf('/') + 1)));
 

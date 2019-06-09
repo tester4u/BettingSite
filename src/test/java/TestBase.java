@@ -1,3 +1,9 @@
+
+//Not much comments, I try to write self-documenting code.
+//ChromeDriver 75.0.3770.8
+//
+//Premier League season is over, so I couldn't bet on match event. Instead I've chosen to bet 'outright' on favourite.
+
 import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -5,7 +11,6 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.PageFactory;
 import pages.MainPage;
 
@@ -17,15 +22,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
 public class TestBase {
 
+    final String BASE_URL = "https://sports.williamhill.com/betting/en-gb";
     WebDriver driver;
-    String baseUrl;
     MainPage mainPage;
 
     static File junitReport;
@@ -33,7 +36,6 @@ public class TestBase {
 
     @BeforeClass
     public static void testSetUp() throws IOException {
-
         String junitReportFile = System.getProperty("user.dir") + "\\junitReportFile.html";
         DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         Date date = new Date();
@@ -42,16 +44,13 @@ public class TestBase {
         junitWriter.write("<html><body>");
         junitWriter.write("<h1>Test Execution Summary - " + dateFormat.format(date)
                 + "</h1>");
-
     }
 
     @AfterClass
     public static void testTearDown() throws IOException {
-
         junitWriter.write("</body></html>");
         junitWriter.close();
         Desktop.getDesktop().browse(junitReport.toURI());
-
     }
 
     @Rule
@@ -87,16 +86,19 @@ public class TestBase {
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "src/drivers/chromedriver");
-        baseUrl = "https://sports.williamhill.com/betting/en-gb";
+        if (System.getProperty("os.name").toLowerCase().equals("linux")) {
+            System.setProperty("webdriver.chrome.driver", "src/drivers/chromedriver");
+        } else {
+            System.setProperty("webdriver.chrome.driver", "src\\drivers\\chromedriver.exe");
+        }
+        System.setProperty("webdriver.http.factory", "apache");
 
         setUpDriver();
-//        setUpMobileDriver();
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-        driver.get(baseUrl);
+        driver.get(BASE_URL);
         mainPage = PageFactory.initElements(this.driver, MainPage.class);
     }
 
@@ -106,16 +108,7 @@ public class TestBase {
         driver.quit();
     }
 
-    private void setUpDriver() {
+    void setUpDriver() {
         driver = new ChromeDriver();
-    }
-
-    private void setUpMobileDriver() {
-        Map<String, String> mobileEmulation = new HashMap<>();
-        mobileEmulation.put("deviceName", "Nexus 5");
-
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
-        driver = new ChromeDriver(chromeOptions);
     }
 }

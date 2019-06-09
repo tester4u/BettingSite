@@ -12,7 +12,7 @@ class Utils {
 
     Utils(WebDriver driver) {
         this.driver = (RemoteWebDriver) driver;
-        wait = new WebDriverWait(driver, 30);
+        wait = new WebDriverWait(driver, 60);
     }
 
     void scrollIntoView(WebElement element) {
@@ -25,11 +25,13 @@ class Utils {
         boolean elementNotClicked = true;
         while (elementNotClicked) {
             action.sendKeys(Keys.DOWN).build().perform();
-            try{
+            try {
+                Thread.sleep(1000);            //I'm not happy with 'sleep', but I couldn't find another way to scroll in emulator
                 element.click();
                 elementNotClicked = false;
             } catch (ElementClickInterceptedException e) {
                 elementNotClicked = true;
+            } catch (InterruptedException ex) {
             }
         }
     }

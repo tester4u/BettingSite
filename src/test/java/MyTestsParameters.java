@@ -16,8 +16,8 @@ public class MyTestsParameters extends TestBase {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                {"0.01"}, {"0.1"},  {"1"}, {"999999999999.99"}
+        return Arrays.asList(new Object[][]{
+                {"0.01"}, {"0.1"}, {"1"}, {"999999999999.99"}
         });
     }
 
@@ -26,7 +26,7 @@ public class MyTestsParameters extends TestBase {
     }
 
     @Test
-    public void placeBetTestWithParameters()   {
+    public void placeBetTestWithParameters() {
         MainPage mainPage = PageFactory.initElements(this.driver, MainPage.class);
         FootballPage footballPage = mainPage.footballLinkClick();
         EventPage eventPage = footballPage.englishPremierLeagueLinkClick();
