@@ -26,8 +26,9 @@ class Utils {
         while (elementNotClicked) {
             action.sendKeys(Keys.DOWN).build().perform();
             try {
-                Thread.sleep(1000);            //I'm not happy with 'sleep', but I couldn't find another way to scroll in emulator
+                Thread.sleep(500);              //I'm not happy with 'sleep', but I couldn't find another way to scroll in emulator
                 element.click();
+                Thread.sleep(500);
                 elementNotClicked = false;
             } catch (ElementClickInterceptedException e) {
                 elementNotClicked = true;
